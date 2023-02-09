@@ -15,9 +15,11 @@ def parseArgs():
     
     parser = argparse.ArgumentParser(description="Plugin used to make active checks against an rcagent.")
     parser.add_argument("-H", "--hostname", help="The hostname of the rcagent host.")
-    parser.add_argument("-p", "--port", type=int, default=5995, help="The port to connect to. Defaults to 5995.")
-    parser.add_argument("-M", "--metric", help="The metric (api endpoint) that you want to check against.")
-    parser.add_argument("-P", "--plugin", help="Plugin to run on the rcagent host.")
+    parser.add_argument("-P", "--port", type=int, default=5995, help="The port to connect to. Defaults to 5995.")
+    parser.add_argument("-e", "--endpoint", help="The API endpoint that you want to check against.")
+    parser.add_argument("-p", "--plugin", help="Plugin to run on the rcagent host.")
+    parser.add_argument("-q", "--queryargs", type=str, action="append", help="Query arguments to append to the API call. Example: -q arg1=1 -q arg2=2.")
+    parser.add_argument("-a", "--args", type=str, action="append", help="Arguments to pass to the API for plugins. Example: -a '--disk=/'.")
     parser.add_argument("-t", "--token", help="The token to access rcagent defined in the rcagent's config file.")
     parser.add_argument("-w", "--warning", help="The warning value to check against.")
     parser.add_argument("-c", "--critical", help="The critical value to check against.")
@@ -39,11 +41,11 @@ def parseArgs():
         parser.error("Hostname is required")
     
     # Verify metric
-    if not args.metric and not args.plugin:
-        parser.error("Must enter a plugin or a metric")
+    if not args.endpoint and not args.plugin:
+        parser.error("Must enter a plugin or an endpoint")
 
     if args.plugin:
-        args.metric = "plugins"
+        args.endpoint = "plugins"
 
     return args
 
@@ -51,8 +53,8 @@ def createURL(args):
     host = args.hostname
     port = args.port
     protocol = args.protocol
-    metric = urllib.parse.quote(args.metric)
-    url = "%s://%s:%s/api/%s" % (protocol, host, port, metric)
+    endpoint = urllib.parse.quote(args.endpoint)
+    url = "%s://%s:%s/api/%s" % (protocol, host, port, endpoint)
     return url
 
 def getFullURL(args):
@@ -64,10 +66,19 @@ def getFullURL(args):
         'warning': args.warning,
         'critical': args.critical,
         'delta': args.delta,
-        'plugin': args.plugin
+        'plugin': args.plugin,
+        'args': args.args
     }
+
+    # Add custom query args to the URL
+    if args.queryargs is not None:
+        for v in args.queryargs:
+            a = v.split("=", 1)
+            if len(a) > 1:
+                urlArgs[a[0]] = a[1]
+
     urlArgs = list((k, v) for k, v in list(urlArgs.items()) if v is not None)
-    url = "%s?%s" % (url, urllib.parse.urlencode(urlArgs))
+    url = "%s?%s" % (url, urllib.parse.urlencode(urlArgs, doseq=True))
     return url
 
 def getJSON(args):
