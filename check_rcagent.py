@@ -110,7 +110,12 @@ def getJSON(args):
         return "CRITICAL: %s" % data['message'], 2
 
     # Parse output
-    output = data['output']
+    if 'output' in data:
+        output = data['output']
+    else:
+        if args.debug:
+            print("Return: %s" % data)
+        return "UNKNOWN: Did not return check data. Verify the passed parameters.", 3
 
     # Add on perfdata if it exits
     if 'prefdata' in data and data['perfdata']:
