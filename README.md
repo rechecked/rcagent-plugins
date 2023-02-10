@@ -15,12 +15,35 @@ To install the plugin on your Nagios systems:
 Running a check for memory usage:
 
 ```
-./check_rcagent.py -H <host> -M memory/virtual -t <token>
+./check_rcagent.py -H <host> -t <token> -e memory/virtual
 ```
 
 Outputs:
 ```
-OK: Using 36.71% (23.38/63.68GiB Total)
+OK: Memory usage is 69.67% (2.52/3.62 GiB Total) | 'percent'=69.67% 'available'=0.63GiB 'used'=2.52GiB 'free'=0.25GiB 'total'=3.62GiB
 ```
 
-For full details about using the plugin, view the documentation at: https://rechecked.io/documentation
+For running a plugin use `--arg=""` for proper parsing rather than `-a` if you are using `--` in your arugment, like this:
+
+```
+./check_rcagent.py -H <host> -t <token> -p check_test.sh --arg="--warning 10" --arg="-c 20"
+```
+
+Output for a plugin that returns the output of the arguments above passed to it:
+```
+--warning 10 -c 20
+```
+
+For pasing query arguments, such as `path=/` for the disk check use:
+
+```
+./check_rcagent.py -H <host> -t <token> -e disks -q path=/
+```
+
+Output:
+```
+OK: Disk usage of / is 34.91% (12.23/35.04 GiB Total) | 'percent'=34.91% 'used'=12.23GiB 'free'=22.81GiB 'total'=35.04GiB
+```
+
+
+Use the `--help` option to see all other options. For full details about using the plugin, [view the documentation](https://rechecked.io/documentation).

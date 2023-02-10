@@ -19,7 +19,7 @@ def parseArgs():
     parser.add_argument("-e", "--endpoint", help="The API endpoint that you want to check against.")
     parser.add_argument("-p", "--plugin", help="Plugin to run on the rcagent host.")
     parser.add_argument("-q", "--queryargs", type=str, action="append", help="Query arguments to append to the API call. Example: -q arg1=1 -q arg2=2.")
-    parser.add_argument("-a", "--args", type=str, action="append", help="Arguments to pass to the API for plugins. Example: -a '--disk=/'.")
+    parser.add_argument("-a", "--arg", type=str, action="append", help="Arguments to pass to the API for plugins. Example: -a '--disk=/'.")
     parser.add_argument("-t", "--token", help="The token to access rcagent defined in the rcagent's config file.")
     parser.add_argument("-w", "--warning", help="The warning value to check against.")
     parser.add_argument("-c", "--critical", help="The critical value to check against.")
@@ -67,7 +67,7 @@ def getFullURL(args):
         'critical': args.critical,
         'delta': args.delta,
         'plugin': args.plugin,
-        'args': args.args
+        'arg': args.arg
     }
 
     # Add custom query args to the URL
