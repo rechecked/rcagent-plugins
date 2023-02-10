@@ -21,12 +21,12 @@ Endpoints are reached using `-e <endpoint>` while plugins are ran using `-p <plu
 Running a check for memory usage:
 
 ```
-./check_rcagent.py -H <host> -t <token> -e memory/virtual
+./check_rcagent.py -H <host> -t <token> -e memory/virtual -w 20 -c 60
 ```
 
 Output:
 ```
-OK: Memory usage is 69.67% (2.52/3.62 GiB Total) | 'percent'=69.67% 'available'=0.63GiB 'used'=2.52GiB 'free'=0.25GiB 'total'=3.62GiB
+CRITICAL: Memory usage is 68.28% (2.47/3.62 GiB Total) | 'percent'=68.28%;20;60 'available'=0.68GiB;20;60 'used'=2.47GiB;20;60 'free'=0.25GiB;20;60 'total'=3.62GiB;20;60
 ```
 
 For pasing query arguments, such as `path=/` for the disk check use:
@@ -42,7 +42,7 @@ OK: Disk usage of / is 34.91% (12.23/35.04 GiB Total) | 'percent'=34.91% 'used'=
 
 #### Plugin Example
 
-For running a plugin use `--arg=""` for proper parsing rather than `-a` if you are using `--` in your arugment, like this:
+For running a plugin use `--arg=""` for proper parsing rather than `-a` if you are using `-`/`--` in your arugment, like this:
 
 ```
 ./check_rcagent.py -H <host> -t <token> -p check_test.sh --arg="--warning 10" --arg="-c 20"
