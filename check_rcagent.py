@@ -118,12 +118,12 @@ def getJSON(args):
         return "UNKNOWN: Did not return check data. Verify the passed parameters.", 3
 
     # Add on perfdata if it exits
-    if 'prefdata' in data and data['perfdata']:
+    if 'perfdata' in data and data['perfdata'] != "":
         output = "%s | %s" % (output, data['perfdata'])
 
     # Add longoutput if it exits
-    if 'longoutput' in data and data['longoutput']:
-        output += " | %s" % data['longoutput']
+    if 'longoutput' in data and data['longoutput'] != "":
+        output += "\n%s" % data['longoutput']
     
     return output, data['exitcode']
 
