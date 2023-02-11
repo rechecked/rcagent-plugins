@@ -54,7 +54,7 @@ def createURL(args):
     port = args.port
     protocol = args.protocol
     endpoint = urllib.parse.quote(args.endpoint)
-    url = "%s://%s:%s/api/%s" % (protocol, host, port, endpoint)
+    url = "%s://%s:%s/status/%s" % (protocol, host, port, endpoint)
     return url
 
 def getFullURL(args):
