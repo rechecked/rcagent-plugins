@@ -32,7 +32,7 @@ CRITICAL: Memory usage is 68.28% (2.47/3.62 GiB Total) | 'percent'=68.28%;20;60 
 For pasing query arguments, such as `path=/` for the disk check use:
 
 ```
-./check_rcagent.py -H <host> -t <token> -e disks -q path=/
+./check_rcagent.py -H <host> -t <token> -e disk -q path=/
 ```
 
 Output:
