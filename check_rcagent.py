@@ -89,7 +89,7 @@ def getJSON(args):
 
     # Create SSL context so we can ignore cert checks
     try:
-        if args.protocol is "https":
+        if args.protocol == "https":
             ctx = ssl.create_default_context()
             if not args.secure:
                 ctx.check_hostname = False
